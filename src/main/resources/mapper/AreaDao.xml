@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.imooc.o2o.dao.AreaDao">
+    <select id="queryArea" resultType="area">
+        SELECT * FROM tb_area ORDER BY priority DESC
+    </select>
+
+    <!--仅供测试声明式事务是否能回滚-->
+    <update id="updateArea" parameterType="int">
+        UPDATE tb_area SET priority = priority + 1 WHERE area_id = #{value}
+    </update>
+</mapper>

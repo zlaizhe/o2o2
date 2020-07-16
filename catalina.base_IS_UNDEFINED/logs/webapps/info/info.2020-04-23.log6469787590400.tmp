@@ -1,0 +1,12 @@
+2020-04-25 13:50:41.634 [main] INFO  com.imooc.o2o.O2OSpringBootApplication - Starting O2OSpringBootApplication on SurfacePro7 with PID 4720 (started by fl673 in C:\Program Files\JetBrains\IntelliJ IDEA 2019.2.4\ideaProjects\o2o2)
+2020-04-25 13:50:41.653 [main] INFO  com.imooc.o2o.O2OSpringBootApplication - No active profile set, falling back to default profiles: default
+2020-04-25 13:50:48.112 [main] INFO  com.imooc.o2o.O2OSpringBootApplication - Started O2OSpringBootApplication in 7.061 seconds (JVM running for 8.18)
+2020-04-23 23:59:16.147 [main] INFO  com.imooc.o2o.O2OSpringBootApplication - Starting O2OSpringBootApplication on SurfacePro7 with PID 9304 (started by fl673 in C:\Program Files\JetBrains\IntelliJ IDEA 2019.2.4\ideaProjects\o2o2)
+2020-04-23 23:59:16.147 [main] INFO  com.imooc.o2o.O2OSpringBootApplication - No active profile set, falling back to default profiles: default
+2020-04-23 23:59:19.556 [main] INFO  com.imooc.o2o.O2OSpringBootApplication - Started O2OSpringBootApplication in 3.757 seconds (JVM running for 4.485)
+2020-04-23 23:59:21.008 [schedulerFactory_Worker-1] INFO  c.i.o2o.service.impl.ProductSellDailyServiceImpl - Quartz Running!
+2020-04-23 23:59:24.001 [schedulerFactory_Worker-2] INFO  c.i.o2o.service.impl.ProductSellDailyServiceImpl - Quartz Running!
+2020-04-23 23:59:27.002 [schedulerFactory_Worker-3] INFO  c.i.o2o.service.impl.ProductSellDailyServiceImpl - Quartz Running!
+2020-04-23 23:59:30.005 [schedulerFactory_Worker-4] INFO  c.i.o2o.service.impl.ProductSellDailyServiceImpl - Quartz Running!
+2020-04-23 23:59:33.015 [schedulerFactory_Worker-5] INFO  c.i.o2o.service.impl.ProductSellDailyServiceImpl - Quartz Running!
+2020-04-23 23:59:36.005 [schedulerFactory_Worker-6] INFO  c.i.o2o.service.impl.ProductSellDailyServiceImpl - Quartz Running!

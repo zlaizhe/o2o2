@@ -1,0 +1,7 @@
+2020-04-24 00:10:59.463 [main] ERROR com.imooc.o2o.service.impl.WechatAuthServiceImpl - insertWechatAuth error:org.springframework.dao.DuplicateKeyException: 
+### Error updating database.  Cause: com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Duplicate entry 'dafahizhfdhaih3' for key 'open_id'
+### The error may involve com.imooc.o2o.dao.WechatAuthDao.insertWechatAuth-Inline
+### The error occurred while setting parameters
+### SQL: INSERT   INTO   tb_wechat_auth(user_id,open_id,create_time)   VALUES   (?,?,?)
+### Cause: com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Duplicate entry 'dafahizhfdhaih3' for key 'open_id'
+; ]; Duplicate entry 'dafahizhfdhaih3' for key 'open_id'; nested exception is com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Duplicate entry 'dafahizhfdhaih3' for key 'open_id'

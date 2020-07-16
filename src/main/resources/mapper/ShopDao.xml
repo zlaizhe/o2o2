@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.imooc.o2o.dao.ShopDao">
+    <!--查询一个Shop-->
+    <select id="queryByShodId" parameterType="long" resultMap="shopMap">
+        SELECT
+               s.*,
+               a.area_id,a.area_name,
+               sc.shop_category_id, sc.shop_category_name
+        FROM
+             tb_shop s, tb_area a, tb_shop_category sc
+        WHERE
+              s.shop_id = #{value} AND s.area_id = a.area_id AND s.shop_category_id = sc.shop_category_id;
+    </select>
+    <!--条件查询的总数-->
+    <select id="queryShopCount" resultType="int">
+        SELECT
+            count(1)
+        FROM
+            tb_shop s, tb_area a, tb_shop_category sc
+        <where>
+            <if test="shopCondition.shopCategory != null and shopCondition.shopCategory.shopCategoryId != null">
+                AND s.shop_category_id = #{shopCondition.shopCategory.shopCategoryId}
+            </if>
+            <if test="shopCondition.shopCategory != null and shopCondition.shopCategory.parent != null
+                and shopCondition.shopCategory.parent.ShopCategoryId != null " ><!--查询某一级分类下的二级分类的商铺-->
+                AND s.shop_category_id IN
+                (SELECT shop_category_id FROM tb_shop_category
+                WHERE parent_id = #{shopCondition.shopCategory.parent.shopCategoryId})
+            </if>
+            <if test="shopCondition.area != null and shopCondition.area.areaId != null">
+                AND s.area_id = #{shopCondition.area.areaId}
+            </if>
+            <if test="shopCondition.shopName != null">
+                AND s.shop_name like '%${shopCondition.shopName}%'
+            </if>
+            <if test="shopCondition.enableStatus != null">
+                AND s.enable_status = #{shopCondition.enableStatus}
+            </if>
+            <if test="shopCondition.owner != null and shopCondition.owner.userId != null">
+                AND s.owner_id = #{shopCondition.owner.userId}
+            </if>
+            AND s.area_id = a.area_id AND s.shop_category_id = sc.shop_category_id
+        </where>
+    </select>
+    <!--条件查询+分页-->
+    <select id="queryShopList" resultMap="shopMap">
+        SELECT
+            s.*,
+            a.area_id,a.area_name,
+            sc.shop_category_id, sc.shop_category_name
+        FROM
+            tb_shop s, tb_area a, tb_shop_category sc
+        <where>
+            <if test="shopCondition.shopCategory != null and shopCondition.shopCategory.shopCategoryId != null">
+                AND s.shop_category_id = #{shopCondition.shopCategory.shopCategoryId}
+            </if>
+            <if test="shopCondition.shopCategory != null and shopCondition.shopCategory.parent != null
+                and shopCondition.shopCategory.parent.ShopCategoryId != null " ><!--查询某一级分类下的二级分类的商铺-->
+                AND s.shop_category_id IN
+                (SELECT shop_category_id FROM tb_shop_category
+                WHERE parent_id = #{shopCondition.shopCategory.parent.shopCategoryId})
+            </if>
+            <if test="shopCondition.area != null and shopCondition.area.areaId != null">
+                AND s.area_id = #{shopCondition.area.areaId}
+            </if>
+            <if test="shopCondition.shopName != null">
+                AND s.shop_name LIKE '%${shopCondition.shopName}%'
+            </if>
+            <if test="shopCondition.enableStatus != null">
+                AND s.enable_status = #{shopCondition.enableStatus}
+            </if>
+            <if test="shopCondition.owner != null and shopCondition.owner.userId != null">
+                AND s.owner_id = #{shopCondition.owner.userId}
+            </if>
+            AND s.area_id = a.area_id AND s.shop_category_id = sc.shop_category_id
+        </where>
+        ORDER BY s.priority DESC
+        LIMIT #{rowIndex}, #{pageSize}<!--不要在意这个报红-->
+    </select>
+    <resultMap id="shopMap" type="shop">
+        <id column="shop_id" property="shopId"/>
+        <result column="shop_name" property="shopName"/>
+        <result column="shop_desc" property="shopDesc"/>
+        <result column="shop_addr" property="shopAddr"/>
+        <result column="phone" property="phone"/>
+        <result column="shop_img" property="shopImg"/>
+        <result column="priority" property="priority"/>
+        <result column="create_time" property="createTime"/>
+        <result column="last_edit_time" property="lastEditTime"/>
+        <result column="enable_status" property="enableStatus"/>
+        <result column="advice" property="advice"/>
+        <association property="area" column="area_id" javaType="area">
+            <id column="area_id" property="areaId"/>
+            <result column="area_name" property="areaName"/>
+<!--            <result column="priority" property="priority"/>-->
+<!--            <result column="create_time" property="createTime"/>-->
+<!--            <result column="last_edit_time" property="lastEditTime"/>-->
+        </association>
+        <association property="shopCategory" column="shop_category_id" javaType="shopCategory">
+            <id column="shop_category_id" property="shopCategoryId"/>
+            <result column="shop_category_name" property="shopCategoryName"/>
+<!--            <result column="shop_category_desc" property="shopCategoryDesc"/>-->
+<!--            <result column="shop_category_img" property="shopCategoryImg"/>-->
+<!--            <result column="priority" property="priority"/>-->
+<!--            <result column="create_time" property="createTime"/>-->
+<!--            <result column="last_edit_time" property="lastEditTime"/>-->
+        </association>
+        <association property="owner" column="user_id" javaType="personInfo">
+            <id column="user_id" property="userId"/>
+            <result column="name" property="name"/>
+<!--            <result column="profile_img" property="profileImg"/>-->
+<!--            <result column="email" property="email"/>-->
+<!--            <result column="gendar" property="gendar"/>-->
+<!--            <result column="create_time" property="createTime"/>-->
+<!--            <result column="last_edit_time" property="lastEditTime"/>-->
+<!--            <result column="enable_status" property="enableStatus"/>-->
+<!--            <result column="user_type" property="userType"/>-->
+        </association>
+    </resultMap>
+
+    <!--添加成功，获取自增主键，封装到shop对象中-->
+    <insert id="insertShop" parameterType="shop" useGeneratedKeys="true"
+            keyColumn="shop_id" keyProperty="shopId">
+        INSERT INTO tb_shop
+        (shop_id, owner_id, area_id, shop_category_id, shop_name,
+         shop_desc, shop_addr, phone, shop_img, priority, create_time, last_edit_time,
+         enable_status, advice)
+        VALUES (#{shopId}, #{owner.userId}, #{area.areaId}, #{shopCategory.shopCategoryId}, #{shopName},
+                #{shopDesc}, #{shopAddr}, #{phone}, #{shopImg}, #{priority}, #{createTime}, #{lastEditTime},
+                #{enableStatus}, #{advice})
+    </insert>
+
+
+    <update id="updateShop" parameterType="shop">
+        <!--使用动态sql条件更新，有添加条件的更新，没有的不更新-->
+        UPDATE tb_shop
+        <set>
+            <if test="shopName != null">shop_name=#{shopName},</if>
+            <if test="shopDesc != null">shop_desc=#{shopDesc},</if>
+            <if test="shopAddr != null">shop_addr=#{shopAddr},</if>
+            <if test="phone != null">phone=#{phone},</if>
+            <if test="shopImg != null">shop_img=#{shopImg},</if>
+            <if test="priority != null">priority=#{priority},</if>
+            <if test="lastEditTime != null">last_edit_time=#{lastEditTime},</if>
+            <if test="enableStatus != null">enable_status=#{enableStatus},</if>
+            <if test="advice != null">advice=#{advice},</if>
+            <if test="shopCategory != null">shop_category_id=#{shopCategory.shopCategoryId},</if>
+            <if test="area != null">area_id=#{area.areaId}</if>
+        </set>
+        where shop_id = #{shopId}
+    </update>
+</mapper>

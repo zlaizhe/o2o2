@@ -1,0 +1,62 @@
+server:
+  port: 80 #tomcat端口
+  servlet:
+    context-path: /o2o #项目虚拟路径
+
+jasypt:
+  encryptor: #使用jasypt对数据库账号密码进行加密，配置密钥和加密算法
+    password: MY
+    algorithm: PBEWithMD5AndDES
+spring:
+  datasource: #spring的连接池（Hikari Pool）
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/o2o2?useUnicode=true&characterEncoding=utf8
+    username: ENC(Q5cQXVelcWv8ggELNiti8A==) #用户名和密码经过加密，写在ENC()中才会被jasypt解密
+    # password: ENC(5wywLQ+8Igds3sb/yY9rPg==) #本地MySQL用
+    password: ENC(rkCAuUdYBxTuafhT6rSGo4H1n0iHWvC/) #云服务器MySQL用
+  redis: #SpringBoot整合redis，配置连接信息
+    host: 127.0.0.1
+    pool: 6379
+#  mvc:
+#    view: # 视图解析器
+#      prefix: /WEB-INF/
+#      suffix: .html
+#    static-path-pattern:
+#  servlet:
+#    multipart: # 文件上传解析器
+#      max-request-size: 20MB # 上传文件总的最大值
+#      max-file-size: 20MB # 单个文件的最大值
+
+mybatis: #配置mybatis
+  type-aliases-package: com.imooc.o2o.entity #pojo别名扫描
+  mapper-locations: classpath:mapper/*.xml # Mapper.xml文件位置
+  configuration: #mybatis主配置参数
+    map-underscore-to-camel-case: true # 开启驼命名转换：table(create_time)->Entiry(createTime)
+    use-column-label: true # 使用列标签替换列别名，默认：true
+    use-generated-keys: true # 使用jdbc的getGeneratedKeys获取自增主键
+
+#Path管理
+win.base.path: D:/projectdev/image
+linux.base.path: /home/xiangze/image
+shop.relevant.path: /upload/item/shop/
+
+#微信相关
+wechat:
+  login:
+    url: 'http://182.92.57.21/o2o/wechatlogin/logincheck' #微信登录
+  auth:
+    url: 'http://182.92.57.21/o2o/shopadmin/addshopauthmap' #店铺授权微信用户
+  productmap:
+    url: 'http://182.92.57.21/o2o/shopadmin/adduserproductmap' #购买商品时积分
+  exchange:
+    url: 'http://182.92.57.21/o2o/shopadmin/exchangeaward' #兑换奖品
+  #对访问微信API的url分段，让功能分配更加灵活
+  appid: 'wx6b816d37665d3835'
+  prefix: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=${wechat.appid}&redirect_uri='
+  middle: '&response_type=code&scope=snsapi_userinfo&state='
+  suffix: '#wechat_redirect'
+
+#wechat.auth.url=http://o2o.yitiaojieinfo.com/o2o/shopadmin/addshopauthmap
+# wechat.login.url=http://o2o.yitiaojieinfo.com/o2o/wechatlogin/logincheck
+#wechat.exchange.url=http://o2o.yitiaojieinfo.com/o2o/shopadmin/exchangeaward
+#wechat.productmap.url=http://o2o.yitiaojieinfo.com/o2o/shopadmin/adduserproductmap
